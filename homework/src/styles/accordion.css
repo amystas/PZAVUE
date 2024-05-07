@@ -1,0 +1,46 @@
+/* https://coolors.co/b8d8ba-d9dbbc-fcddbc-ef959d-69585f */
+* {
+--celadon: #b8d8baff;
+--beige: #d9dbbcff;
+--light-orange: #fcddbcff;
+--salmon-pink: #ef959dff;
+--wenge: #69585fff;
+--mountbatten-pink: #99858E;
+
+font-family: verdana;
+}
+header {
+    background-color: var(--wenge);
+    color: bisque;
+    height: 7vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: 4px var(--mountbatten-pink) solid;
+    border-radius: 12px;
+    padding: 3px;
+}
+section
+{
+    width: 10vw;
+    background-color: var(--light-orange);
+    padding: 10px;
+    border: solid 4px var(--salmon-pink);
+    border-radius: 12px;
+}
+.tasks
+{
+    background-color: var(--beige);
+    padding: 5px;
+    border-radius: 12px;
+}
+.toggle
+{
+    height: 2rem;
+    background-color: var(--mountbatten-pink);
+    color: bisque;
+    font-size: large;
+    border: none;
+    border-radius: 6px;
+}

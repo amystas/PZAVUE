@@ -1,6 +1,8 @@
 <script setup>
 // doc 14
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed, watch } from 'vue';
+import TodoItem from './TodoItem.vue';
+import TodoInput from './TodoInput.vue';
 
 const name = ref('Amelia');
 
@@ -26,7 +28,56 @@ const todo = ref([
     text: "Wynieść śmieci",
     finished: false
   },
+  {
+    text: "Umówić wizytę",
+    finished: false
+  },
+  {
+    text: "Zetrzeć kurze",
+    finished: false
+  },
+  {
+    text: "Umyć naczynia",
+    finished: false
+  },
 ]);
+
+// doc 16
+name.value = 'Amelia';
+const lastname = ref('Staszczyk');
+const fullname = computed(() => name.value + ' ' + lastname.value);
+const showWarning = ref(true);
+
+function hideWarning() {
+  showWarning.value = false;
+}
+
+function addTask() {
+  todo.value.push({text: document.getElementById('newTaskText').value, finished: false});
+}
+
+const unfinishedTasksCount = ref(0);
+watch(todo, (newValue) => {
+	unfinishedTasksCount.value = newValue.filter(task => !task.finished).length;
+  console.log(unfinishedTasksCount.value);
+  if(unfinishedTasksCount.value < 4) {
+    showWarning.value = false;
+    console.log('no niby działa');
+  }
+}, { deep: true });
+
+
+const completedTasks = computed(() => todo.value.filter(task => task.finished).length + '/' + todo.value.length);
+
+// doc 17
+function changeStatus(task, completed) {
+  task.finished = !completed;
+}
+function addNewTask(text) {
+  console.log('app.vue');
+  todo.value.push({text: text, finished: false});
+}
+
 </script>
 
 <template>
@@ -83,7 +134,7 @@ const todo = ref([
       <template v-else>
         <p>Brak zadań do zrobienia</p>
       </template> -->
-
+        <h4>Ukończono {{ completedTasks }} zadań</h4>
         <template v-for="task in todo">
           <li v-if="task.finished == false">
             {{ task.text }}
@@ -97,8 +148,26 @@ const todo = ref([
       <template v-if="todo.every((task) => task.finished)">
         <p>Brak zadań do zrobienia</p>
       </template>
+      <template v-if="showWarning">
+        <p>Może byś coś z tego zrobił wreszczie</p>
+        <button @click="hideWarning()">OK</button>
+      </template>
 
 
     </ul>
+    <label for="">Dodaj zadanie: </label>
+    <input type="text" id="newTaskText" v-on:keyup.enter="addTask">
+    <button @click="addTask">Dodaj</button>
+  </div>
+
+  <!-- doc 17 -->
+  <div>
+    <!-- <TodoItem v-for="task in todo" :task="task.text" :completed="task.finished" @changed="changeStatus(task, $event)"></TodoItem> -->
+    <TodoItem v-for="task in todo" :task="task.text" v-model="task.finished" @changed="changeStatus(task, $event)"></TodoItem>
+    <TodoInput @create="addNewTask($event)"></TodoInput>
+  </div>
+
+  <div>
+    <h2>{{ fullname }}</h2>
   </div>
 </template>
